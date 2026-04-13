@@ -1,0 +1,37 @@
+name: Wrapper Source CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  wrapper-source:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required files
+        run: |
+          set -eu
+
+          required_files="
+          README.md
+          CHANGELOG.md
+          VERSION
+          wrapper-source.yaml
+          run.sh
+          nginx.conf
+          patches/omnitools-ingress-v0.6.0.patch
+          "
+
+          for file in $required_files; do
+            test -f "$file"
+          done
+
+      - name: Validate metadata and shell
+        run: |
+          set -eu
+          ruby -e 'require "yaml"; YAML.load_file("wrapper-source.yaml")'
+          /bin/sh -n run.sh

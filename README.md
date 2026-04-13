@@ -1,26 +1,45 @@
-# OmniTools
+# OmniTools Wrapper Source
 
-Repositorio hijo fuente para el wrapper de Home Assistant de OmniTools.
+Runtime wrapper source para OmniTools consumible por el repo padre de Home Assistant por tag.
 
-Este repo no pretende ser el repositorio final de apps de Home Assistant. El repositorio final y publicable es el repo padre; este repo expone una superficie estable para que el padre pueda sincronizar la app `omnitools` por tag sin reglas especiales.
+Este repo no es el add-on final publicado. Solo contiene los artefactos del wrapper
+que el repo padre puede consumir cuando quiera sincronizar una tag estable.
 
-## Contrato estable
+## Qué vive aquí
 
-- La carpeta canónica consumible por el repo padre es `omnitools/`.
-- La versión de la app debe seguir semver estable y alinearse con la tag del repo, por ejemplo `0.6.0` con `v0.6.0`.
-- La referencia al upstream se expone con `APP_REPO` y `APP_REF`.
-- El `Dockerfile` es la fuente canónica del build, alineado con la política de Home Assistant `2026.04`.
-- Cada cambio en los artefactos canónicos debe ir acompañado de una nueva tag estable.
+- `run.sh`: entrypoint de runtime del wrapper
+- `nginx.conf`: configuracion nginx usada por el wrapper
+- `patches/`: parche local aplicado al upstream para compatibilidad con ingress
+- `wrapper-source.yaml`: metadata pequena para que el padre pueda leer `upstream_repo` y `upstream_ref`
+- `VERSION`: version visible del wrapper-source consumible por el padre
+- `CHANGELOG.md`: historial corto de cambios del wrapper
 
-## Artefactos canónicos
+## Qué no vive aquí
 
-- `omnitools/config.yaml`
-- `omnitools/Dockerfile`
-- `omnitools/run.sh`
-- `omnitools/nginx.conf`
-- `omnitools/patches/omnitools-ingress-v0.6.0.patch`
+- no `repository.yaml`
+- no `build.yaml`
+- no metadatos finales publicados del add-on
+- no configuracion final de Supervisor para Home Assistant
 
-## Objetivo
+## Modelo de consumo
 
-- Mantener el runtime y el parche de ingress en un repo hijo estable.
-- Permitir que el repo padre copie o sincronice `omnitools/` por tag sin depender de detalles internos del repo.
+El repo padre puede consumir este wrapper-source por tag y sincronizar:
+
+- `version` desde `VERSION`
+- `APP_REF` desde `wrapper-source.yaml`
+
+El repo padre sigue siendo el unico repositorio final publicado para Home Assistant.
+
+## Artefactos canónicos del wrapper-source
+
+- `run.sh`
+- `nginx.conf`
+- `patches/omnitools-ingress-v0.6.0.patch`
+- `wrapper-source.yaml`
+- `VERSION`
+
+## Regla de coordinacion
+
+- Cada cambio del wrapper-source debe publicarse con una nueva tag semver estable.
+- Cambios de wrapper o de upstream como `upstream_ref` deben coordinarse explicitamente en el repo padre.
+- El padre no debe deducir automaticamente archivos finales de add-on desde una superficie tipo `omnitools/`.

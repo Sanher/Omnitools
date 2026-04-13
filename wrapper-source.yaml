@@ -1,0 +1,7 @@
+wrapper_name: omnitools
+wrapper_type: home_assistant_wrapper_source
+upstream_repo: https://github.com/iib0011/omni-tools.git
+upstream_ref: v0.6.0
+runtime_entrypoint: run.sh
+nginx_config: nginx.conf
+patches_dir: patches
