@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.3
+
+- Anade un workflow que notifica al repo padre cuando se publica una tag de version.
+
 ## 0.6.2
 
 - Convierte el repo a wrapper-source real consumible por tag.
